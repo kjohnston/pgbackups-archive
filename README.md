@@ -21,7 +21,7 @@ Install Heroku addons:
 
     heroku addons:add pgbackups:plus
     heroku addons:add scheduler:standard
-    
+
 Note: You can use paid-for versions of pgbackups if you'd like, however the dev and basic database offerings only support the free (plus) version.
 
 Apply environment variables:
@@ -30,13 +30,13 @@ Apply environment variables:
     heroku config:add PGBACKUPS_AWS_SECRET_ACCESS_KEY="YYY"
     heroku config:add PGBACKUPS_BUCKET="myapp-backups"
     heroku config:add PGBACKUPS_REGION="us-west-2"
-    
+
 Note: A good security measure would be to use a dedicated set of AWS credentials with a security policy only allowing access to the bucket you're specifying.
 
 Add the rake task to scheduler:
 
     heroku addons:open scheduler
-    
+
 Then specify `rake pgbackups:archive` as a task you would like to run at any of the available intervals.
 
 ## Loading the Rake task
@@ -46,7 +46,6 @@ If you're using this gem in a Rails 3 app the rake task will be automatically lo
 If you're using this gem with a Rails 2 app, or non-Rails app, add the following to your Rakefile:
 
     require "pgbackups-archive"
-    load "tasks/pgbackups_archive.rake"
 
 ## Disclaimer
 
