@@ -31,7 +31,7 @@ Apply environment variables:
     heroku config:add PGBACKUPS_BUCKET="myapp-backups"
     heroku config:add PGBACKUPS_REGION="us-west-2"
 
-Note: A good security measure would be to use a dedicated set of AWS credentials with a security policy only allowing access to the bucket you're specifying.
+Note: A good security measure would be to use a dedicated set of AWS credentials with a security policy only allowing access to the bucket you're specifying.  See this Pro Tip on [Assigning an AWS IAM user access to a single S3 bucket](http://coderwall.com/p/dwhlma).
 
 Add the rake task to scheduler:
 
