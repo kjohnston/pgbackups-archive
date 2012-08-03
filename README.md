@@ -39,6 +39,15 @@ Add the rake task to scheduler:
     
 Then specify `rake pgbackups:archive` as a task you would like to run at any of the available intervals.
 
+## Loading the Rake task
+
+If you're using this gem in a Rails 3 app the rake task will be automatically loaded via a Railtie.
+
+If you're using this gem with a Rails 2 app, or non-Rails app, add the following to your Rakefile:
+
+    require "pgbackups-archive"
+    load "tasks/pgbackups_archive.rake"
+
 ## Disclaimer
 
 I shouldn't have to say this, but I will.  Your backups are your responsibility.  Take charge of ensuring that they run, archive and can be restored periodically as expected.  Don't rely on Heroku, this gem, or anything else out there to substitute for a regimented database backup and restore testing strategy.

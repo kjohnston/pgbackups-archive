@@ -1,4 +1,4 @@
-if defined?(Rails)
+if defined?(Rails) && defined?(Rails::Railtie)
   module PgbackupsArchive
     class Railtie < Rails::Railtie
       railtie_name :pgbackups_archive
