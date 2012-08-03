@@ -59,6 +59,13 @@ I shouldn't have to say this, but I will.  Your backups are your responsibility.
 4. Push to the branch (`git push origin my-new-feature`)
 5. [Create a Pull Request](https://github.com/kjohnston/pgbackups-archive/pull/new)
 
+## Contributors
+
+Many thanks go to the following who have contributed to making this gem even better:
+
+* [Robert Bousquet (@bousquet)](https://github.com/bousquet)
+  * Autoload rake task into Rails 2.x once the gem has been loaded.
+
 ## License
 
 * Freely distributable and licensed under the [MIT license](http://kjohnston.mit-license.org/license.html).
