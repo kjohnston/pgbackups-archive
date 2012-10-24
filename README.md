@@ -65,6 +65,8 @@ Many thanks go to the following who have contributed to making this gem even bet
 
 * [Robert Bousquet (@bousquet)](https://github.com/bousquet)
   * Autoload rake task into Rails 2.x once the gem has been loaded.
+* [Daniel Morrison (@danielmorrison)](https://github.com/danielmorrison)
+  * Ruby 1.8-compatible hash syntax.
 
 ## License
 
