@@ -19,10 +19,8 @@ Add the gem to your Gemfile and bundle:
 
 Install Heroku addons:
 
-    heroku addons:add pgbackups:plus
+    heroku addons:add pgbackups
     heroku addons:add scheduler:standard
-
-Note: You can use paid-for versions of pgbackups if you'd like, however the dev and basic database offerings only support the free (plus) version.
 
 Apply environment variables:
 
