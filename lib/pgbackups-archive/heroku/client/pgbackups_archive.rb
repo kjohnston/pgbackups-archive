@@ -12,7 +12,7 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def capture
-    @backup = @client.create_transfer ENV["DATABASE_URL"], ENV["DATABASE_URL"], nil, "BACKUP", :expire => true
+    @backup = @client.create_transfer database_url, database_url, nil, "BACKUP", :expire => true
 
     until @backup["finished_at"]
       print "."
@@ -21,6 +21,14 @@ class Heroku::Client::PgbackupsArchive
     end
 
     @backup
+  end
+
+  def database_url
+    ENV[database_config_var]
+  end
+
+  def database_config_var
+    ENV['PGBACKUPS_DATABASE'] || 'DATABASE_URL'
   end
 
   def file
