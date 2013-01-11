@@ -27,8 +27,23 @@ class Heroku::Client::PgbackupsArchive
     ENV["PGBACKUPS_DATABASE_URL"] || ENV["DATABASE_URL"]
   end
 
+
+
   def file
-    open @backup["public_url"]
+    output = open(temp_file_path, "wb")
+    open(@backup["public_url"]) do |input|
+      while (buffer = input.read(1_024 * 1_024))
+        print "."
+        $stdout.flush
+        output.write(buffer)
+      end
+    end
+    output.close
+    File.open temp_file_path, 'r'
+  end
+
+  def temp_file_path
+    "./tmp/#{URI(@backup["public_url"]).path.split('/').last}"
   end
 
   def key
