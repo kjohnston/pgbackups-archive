@@ -28,17 +28,14 @@ class Heroku::Client::PgbackupsArchive
   end
 
 
-
-  def file
-    output = open(temp_file_path, "wb")
-    open(@backup["public_url"]) do |input|
-      while (buffer = input.read(1_024 * 1_024))
-        print "."
-        $stdout.flush
-        output.write(buffer)
+  def file 
+    File.open(temp_file_path, 'wb') do |output|
+      streamer = lambda do |chunk, remaining_bytes, total_bytes|
+        puts "Download backup : #{(remaining_bytes.to_f / total_bytes) * 100}%"  
+        output.write output
       end
+      Excon.get(@backup["public_url"], :response_block => streamer)
     end
-    output.close
     File.open temp_file_path, 'r'
   end
 
