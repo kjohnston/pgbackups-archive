@@ -24,11 +24,7 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def database_url
-    ENV[database_config_var]
-  end
-
-  def database_config_var
-    ENV['PGBACKUPS_DATABASE'] || 'DATABASE_URL'
+    ENV["PGBACKUPS_DATABASE_URL"] || ENV["DATABASE_URL"]
   end
 
   def file

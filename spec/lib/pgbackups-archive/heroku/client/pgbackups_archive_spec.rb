@@ -39,12 +39,12 @@ describe Heroku::Client::PgbackupsArchive do
 
     context 'backup database is configured' do
       before do 
-        ENV['PGBACKUPS_DATABASE'] = 'PURPLE'
-        ENV['PURPLE'] = 'db_purple_url'
+        ENV['PGBACKUPS_DATABASE_URL'] = 'backup_db'
+        ENV['DATABASE_URL'] = 'db_url'
       end
 
       it 'defaults to using the DATABASE_URL' do
-        archive.client.should_receive(:create_transfer).with('db_purple_url', 'db_purple_url', nil, 'BACKUP', :expire => true).and_return(backup)
+        archive.client.should_receive(:create_transfer).with('backup_db', 'backup_db', nil, 'BACKUP', :expire => true).and_return(backup)
         archive.capture
       end
     end
