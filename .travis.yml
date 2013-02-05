@@ -1,0 +1,12 @@
+language: ruby
+rvm:
+  - 1.9.2
+  - 1.9.3
+  - jruby-19mode
+  - rbx-19mode
+env:
+  - CI=true RAILS_ENV=test JRUBY_OPTS=--1.9 RBXOPT=-X19
+before_script: "./test/ci/before_script.sh"
+script: "./test/ci/ci_runner.sh"
+notifications:
+  flowdock: 1ec5c0efa5a264c67c6ba3b2e6574a70
