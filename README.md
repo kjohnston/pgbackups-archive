@@ -30,7 +30,7 @@ Apply environment variables:
     heroku config:add PGBACKUPS_REGION="us-west-2"
 
 Optionally set the database to perform backups on.  Defaults to DATABASE_URL.
-    
+
     heroku config:add PGBACKUPS_DATABASE="HEROKU_POSTGRESQL_GOLD_URL"
 
 
@@ -70,8 +70,10 @@ Many thanks go to the following who have contributed to making this gem even bet
   * Autoload rake task into Rails 2.x once the gem has been loaded.
 * [Daniel Morrison (@danielmorrison)](https://github.com/danielmorrison)
   * Ruby 1.8-compatible hash syntax.
+* [Karl Baum (@kbaum)](https://github.com/kbaum)
+  * Custom setting for database to backup.
 
 ## License
 
 * Freely distributable and licensed under the [MIT license](http://kjohnston.mit-license.org/license.html).
-* Copyright (c) 2012 Kenny Johnston [![endorse](http://api.coderwall.com/kjohnston/endorsecount.png)](http://coderwall.com/kjohnston)
+* Copyright (c) 2012-2013 Kenny Johnston [![endorse](http://api.coderwall.com/kjohnston/endorsecount.png)](http://coderwall.com/kjohnston)
