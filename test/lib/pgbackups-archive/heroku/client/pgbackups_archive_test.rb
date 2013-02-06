@@ -27,6 +27,22 @@ describe Heroku::Client::PgbackupsArchive do
     end
   end
 
+  describe '#file' do
+    before do
+
+      archive.instance_eval do
+        @backup = {}
+        @backup['public_url'] = "https://raw.github.com/kjohnston/pgbackups-archive/master/pgbackups-archive.gemspec"
+      end
+
+    end
+
+    it 'downloads the backup file' do
+      archive.file.read.must_be :=~, /Gem::Specification/
+    end
+
+  end
+
   describe "configure the backup database" do
 
     describe "backup database is not configured" do
