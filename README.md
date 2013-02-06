@@ -29,9 +29,9 @@ Apply environment variables:
     heroku config:add PGBACKUPS_BUCKET="myapp-backups"
     heroku config:add PGBACKUPS_REGION="us-west-2"
 
-Optionally set the database to perform backups on.  Defaults to DATABASE_URL.
+By default backups work of your primary database or the value of ENV['DATABASE_URL'], but database backups from your primary can impact the performance of your application.  Optionally set an alternate database to perform backups on with:
 
-    heroku config:add PGBACKUPS_DATABASE="HEROKU_POSTGRESQL_GOLD_URL"
+    heroku config:add PGBACKUPS_DATABASE_URL="your_follower_database_url_here"
 
 
 Note: A good security measure would be to use a dedicated set of AWS credentials with a security policy only allowing access to the bucket you're specifying.  See this Pro Tip on [Assigning an AWS IAM user access to a single S3 bucket](http://coderwall.com/p/dwhlma).
