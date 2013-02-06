@@ -1,4 +1,5 @@
 require "heroku/client"
+require 'tmpdir'
 
 class Heroku::Client::PgbackupsArchive
 
@@ -40,7 +41,7 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def temp_file_path
-    "./tmp/#{URI(@backup["public_url"]).path.split('/').last}"
+    "#{Dir.tmpdir}/#{URI(@backup["public_url"]).path.split('/').last}"
   end
 
   def key
