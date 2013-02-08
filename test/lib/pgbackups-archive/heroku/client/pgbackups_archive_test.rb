@@ -38,7 +38,7 @@ describe Heroku::Client::PgbackupsArchive do
     end
 
     it 'downloads the backup file' do
-      archive.file.read.must_be :=~, /Gem::Specification/
+      archive.file.read.must_match /Gem::Specification/
     end
 
   end
