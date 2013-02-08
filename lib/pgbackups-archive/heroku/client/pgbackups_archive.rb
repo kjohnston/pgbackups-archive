@@ -1,4 +1,5 @@
 require "heroku/client"
+require 'tmpdir'
 
 class Heroku::Client::PgbackupsArchive
 
@@ -27,8 +28,20 @@ class Heroku::Client::PgbackupsArchive
     ENV["PGBACKUPS_DATABASE_URL"] || ENV["DATABASE_URL"]
   end
 
-  def file
-    open @backup["public_url"]
+
+  def file 
+    File.open(temp_file_path, 'wb') do |output|
+      streamer = lambda do |chunk, remaining_bytes, total_bytes|
+        puts "Download backup : #{(remaining_bytes.to_f / total_bytes) * 100}%"  
+        output.write chunk
+      end
+      Excon.get(@backup["public_url"], :response_block => streamer)
+    end
+    File.open temp_file_path, 'r'
+  end
+
+  def temp_file_path
+    "#{Dir.tmpdir}/#{URI(@backup["public_url"]).path.split('/').last}"
   end
 
   def key
