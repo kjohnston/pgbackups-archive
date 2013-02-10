@@ -2,49 +2,46 @@ require "minitest_helper"
 require "heroku/client"
 
 describe Heroku::Client::PgbackupsArchive do
-  let(:archive) {
-    Heroku::Client::PgbackupsArchive.new(
-      :pgbackups_url => "https://ip:password@pgbackups.heroku.com/client"
-    )
-  }
-  let(:backup) { { "finished_at" => "some timestamp" } }
+  let(:backup)   { Heroku::Client::PgbackupsArchive.new }
+  let(:pgbackup) { { "finished_at" => "some timestamp" } }
+
+  before do
+    ENV["PGBACKUPS_URL"] = "https://ip:password@pgbackups.heroku.com/client"
+  end
 
   it "should use a pgbackup client" do
-    archive.client.class.must_equal Heroku::Client::Pgbackups
+    backup.client.class.must_equal Heroku::Client::Pgbackups
   end
 
   describe "given a finished_at timestamp" do
-    before { archive.client.stubs(:create_transfer).returns(backup) }
+    before { backup.client.stubs(:create_transfer).returns(pgbackup) }
 
     it "should capture the backup" do
-      archive.capture.must_equal backup
+      backup.capture
+      backup.pgbackup.must_equal pgbackup
     end
 
     it "should store the backup" do
-      archive.stubs(:key).returns("key")
-      archive.stubs(:file).returns("file")
-      archive.store.class.must_equal Fog::Storage::AWS::File
+      backup.stubs(:key).returns("key")
+      backup.stubs(:file).returns("file")
+      backup.archive.class.must_equal Fog::Storage::AWS::File
     end
   end
 
-  describe '#file' do
+  describe "#file" do
     before do
-
-      archive.instance_eval do
-        @backup = {}
-        @backup['public_url'] = "https://raw.github.com/kjohnston/pgbackups-archive/master/pgbackups-archive.gemspec"
+      backup.instance_eval do
+        @pgbackup = {}
+        @pgbackup["public_url"] = "https://raw.github.com/kjohnston/pgbackups-archive/master/pgbackups-archive.gemspec"
       end
-
     end
 
-    it 'downloads the backup file' do
-      archive.file.read.must_match /Gem::Specification/
+    it "downloads the backup file" do
+      backup.send(:file).read.must_match /Gem::Specification/
     end
-
   end
 
   describe "configure the backup database" do
-
     describe "backup database is not configured" do
       before do
         ENV["PGBACKUPS_DATABASE_URL"] = nil
@@ -52,11 +49,11 @@ describe Heroku::Client::PgbackupsArchive do
       end
 
       it "defaults to using the DATABASE_URL" do
-        archive.client.expects(:create_transfer)
-        .with("db_url", "db_url", nil, "BACKUP", :expire => true)
-        .returns(backup)
+        backup.client.expects(:create_transfer)
+          .with("db_url", "db_url", nil, "BACKUP", :expire => true)
+          .returns(pgbackup)
 
-        archive.capture
+        backup.capture
       end
     end
 
@@ -67,11 +64,11 @@ describe Heroku::Client::PgbackupsArchive do
       end
 
       it "defaults to using the DATABASE_URL" do
-        archive.client.expects(:create_transfer)
-        .with("backup_db", "backup_db", nil, "BACKUP", :expire => true)
-        .returns(backup)
+        backup.client.expects(:create_transfer)
+          .with("backup_db", "backup_db", nil, "BACKUP", :expire => true)
+          .returns(pgbackup)
 
-        archive.capture
+        backup.capture
       end
     end
 
