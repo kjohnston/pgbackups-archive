@@ -5,6 +5,14 @@ class Heroku::Client::PgbackupsArchive
 
   attr_reader :client, :pgbackup
 
+  def self.perform
+    backup = new
+    backup.capture
+    backup.download
+    backup.archive
+    backup.delete
+  end
+
   def initialize(attrs={})
     Heroku::Command.load
     @client   = Heroku::Client::Pgbackups.new pgbackups_url
