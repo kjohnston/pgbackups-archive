@@ -72,6 +72,7 @@ Many thanks go to the following who have contributed to making this gem even bet
   * Ruby 1.8-compatible hash syntax.
 * [Karl Baum (@kbaum)](https://github.com/kbaum)
   * Custom setting for database to backup.
+  * Streaming support to handle large backup files.
 
 ## License
 
