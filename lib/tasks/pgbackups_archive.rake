@@ -1,9 +1,8 @@
 namespace :pgbackups do
 
+  desc "Perform a pgbackups backup then archive to S3."
   task :archive do
-    archive = Heroku::Client::PgbackupsArchive.new(:pgbackups_url => ENV["PGBACKUPS_URL"])
-    archive.capture
-    archive.store
+    Heroku::Client::PgbackupsArchive.perform
   end
 
 end
