@@ -48,7 +48,13 @@ If you're using this gem in a Rails 3 app the rake task will be automatically lo
 
 If you're using this gem with a Rails 2 app, or non-Rails app, add the following to your Rakefile:
 
-    require "pgbackups-archive"
+```ruby
+require "pgbackups-archive"
+```
+
+## Running the test suite
+
+This gem uses [thincloud-test](https://github.com/newleaders/thincloud-test) to manage its test suite configuration.  This provides MiniTest, Guard and friends.  To run the test suite, use the `guard` command and save a file or hit enter to run the full suite.
 
 ## Disclaimer
 
