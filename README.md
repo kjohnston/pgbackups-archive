@@ -52,9 +52,11 @@ If you're using this gem with a Rails 2 app, or non-Rails app, add the following
 require "pgbackups-archive"
 ```
 
-## Running the test suite
+## Testing
 
 This gem uses [thincloud-test](https://github.com/newleaders/thincloud-test) to manage its test suite configuration.  This provides MiniTest, Guard and friends.  To run the test suite, use the `guard` command and save a file or hit enter to run the full suite.
+
+Use the [pgbackups-archive-dummy](https://github.com/kjohnston/pgbackups-archive-dummy) test harness to setup a dummy database on Heroku to test against.
 
 ## Disclaimer
 
