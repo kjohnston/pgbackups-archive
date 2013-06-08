@@ -13,13 +13,13 @@ You can configure retention settings at the Amazon S3 bucket level from within t
 ## Use
 Backups can be set up by either bundling with your existing heroku app or creating a standalone heroku app just for backups.
 
-### Add to your existing application
+### Option 1 - Add to your existing application
 Add the gem to your Gemfile and bundle:
 
     gem "pgbackups-archive"
     bundle install
 
-### Creating a new standalone application (Recommended)
+### Option 2 - Creating a new standalone application (Recommended)
 Create a new heroku application just for backing up your database.  Then clone the [pgackups-archive-app](https://github.com/kbaum/pgbackups-archive-app) project, and push to your new heroku app.  You must add a PGBACKUPS_DATABASE_URL config var pointing at your main application's database url (See below).
 
 Aside from decoupling db backups from your main application, creating a standalone pgbackups heroku applicaton has the added benefit of being cheaper as heroku gives you a free dyno for your performing backups.  Thanks Heroku!
