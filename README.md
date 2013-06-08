@@ -11,18 +11,26 @@ The rake task will use pgbackups' `--expire` flag to remove the oldest pgbackup 
 You can configure retention settings at the Amazon S3 bucket level from within the AWS Console if you like.
 
 ## Use
+Backups can be set up by either bundling with your existing heroku app or creating a standalone heroku app just for backups.
 
+### Add to your existing application
 Add the gem to your Gemfile and bundle:
 
     gem "pgbackups-archive"
     bundle install
 
-Install Heroku addons:
+### Creating a new standalone application (Recommended)
+Create a new heroku application just for backing up your database.  Then clone the [pgackups-archive-app](https://github.com/kbaum/pgbackups-archive-app) project, and push to your new heroku app.  You must add a PGBACKUPS_DATABASE_URL config var pointing at your main application's database url (See below).
+
+Aside from decoupling db backups from your main application, creating a standalone pgbackups heroku applicaton has the added benefit of being cheaper as heroku gives you a free dyno for your performing backups.  Thanks Heroku!
+
+
+### Install Heroku addons:
 
     heroku addons:add pgbackups
     heroku addons:add scheduler:standard
 
-Apply environment variables:
+### Apply environment variables:
 
     heroku config:add PGBACKUPS_AWS_ACCESS_KEY_ID="XXX"
     heroku config:add PGBACKUPS_AWS_SECRET_ACCESS_KEY="YYY"
@@ -32,6 +40,8 @@ Apply environment variables:
 By default backups work of your primary database or the value of ENV['DATABASE_URL'], but database backups from your primary can impact the performance of your application.  Optionally set an alternate database to perform backups on with:
 
     heroku config:add PGBACKUPS_DATABASE_URL="your_follower_database_url_here"
+
+As mentioned above, the PGBACKUPS_DATABASE_URL is manditory if you are the using pgbackups-archive-app from a separate heroku environment.
 
 
 Note: A good security measure would be to use a dedicated set of AWS credentials with a security policy only allowing access to the bucket you're specifying.  See this Pro Tip on [Assigning an AWS IAM user access to a single S3 bucket](http://coderwall.com/p/dwhlma).
