@@ -40,6 +40,10 @@ Aside from decoupling db backups from your main application, creating a standalo
 By default backups work of your primary database or the value of ENV['DATABASE_URL'], but database backups from your primary can impact the performance of your application.  Optionally set an alternate database to perform backups on with:
 
     heroku config:add PGBACKUPS_DATABASE_URL="your_follower_database_url_here"
+    
+Eg. (don't use follower's backup url `PGBACKUPS_URL`)
+    
+    PGBACKUPS_DATABASE_URL: postgres://Zuisupdfyjcqsf:uckFMsF1OPhm3po7yT1nUuPx3y@ec2-54-217-215-96.eu-west-1.compute.amazonaws.com:5432/dehkavmjtbf5c0
 
 As mentioned above, the PGBACKUPS_DATABASE_URL is manditory if you are the using pgbackups-archive-app from a separate heroku environment.
 
