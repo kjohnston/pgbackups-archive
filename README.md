@@ -4,55 +4,56 @@ A means of automating Heroku's pgbackups and archiving them to Amazon S3 via the
 
 ## Overview
 
-The `pgbackups:archive` rake task that this gem provides will capture a pgbackup, wait for it to complete, then store it within the Amazon S3 bucket you specify.  This rake task can be scheduled via the Heroku Scheduler, thus producing automated, offsite, backups.
+The `pgbackups:archive` rake task this gem provides will capture a pgbackup, wait for it to complete, then store it within the Amazon S3 bucket you specify.  This rake task can be scheduled via the Heroku Scheduler, thus producing automated, offsite, backups.
 
 The rake task will use pgbackups' `--expire` flag to remove the oldest pgbackup Heroku is storing when there are no free slots remaining.
 
 You can configure retention settings at the Amazon S3 bucket level from within the AWS Console if you like.
 
 ## Use
-Backups can be set up by either bundling with your existing heroku app or creating a standalone heroku app just for backups.
 
-### Option 1 - Add to your existing application
+### Determine which Heroku app to run the task under
+
+#### Option 1 - Add `pgbackups-archive` to your existing application
+
 Add the gem to your Gemfile and bundle:
 
     gem "pgbackups-archive"
     bundle install
 
-### Option 2 - Creating a new standalone application (Recommended)
-Create a new heroku application just for backing up your database.  Then clone the [pgackups-archive-app](https://github.com/kbaum/pgbackups-archive-app) project, and push to your new heroku app.  You must add a PGBACKUPS_DATABASE_URL config var pointing at your main application's database url (See below).
+#### Option 2 - Add `pgbackups-archive` to a standalone application
 
-Aside from decoupling db backups from your main application, creating a standalone pgbackups heroku applicaton has the added benefit of being cheaper as heroku gives you a free dyno for your performing backups.  Thanks Heroku!
+* Create a new Heroku application to dedicate to backing up your database.
+* Clone [pgackups-archive-app](https://github.com/kbaum/pgbackups-archive-app) push to your new Heroku app.
+* Add a `PGBACKUPS_DATABASE_URL` environment variable to your backup app that points to your main app's `DATABASE_URL`, or other follower URL, so that `pgbackups-archive` knows which database to backup.
 
+This option is generally recommended over Option 1, particularly if your application has larger slug size and therefore higher memory requirements.  This is because the streaming download & upload of the backup file will utilize a certain amount of memory beyond what an instance of your application uses and if you're close to the threshold of your Dyno size as it is, this increment could put the instance over the limit and cause it to encounter a memory allocation error.  By running a dedicated Heroku app to run `pgbackups-archive` the task will have ample room at the 1X Dyno level to stream the backup files.
 
-### Install Heroku addons:
+### Install Heroku addons
 
     heroku addons:add pgbackups
     heroku addons:add scheduler:standard
 
-### Apply environment variables:
+### Apply environment variables
 
     heroku config:add PGBACKUPS_AWS_ACCESS_KEY_ID="XXX"
     heroku config:add PGBACKUPS_AWS_SECRET_ACCESS_KEY="YYY"
     heroku config:add PGBACKUPS_BUCKET="myapp-backups"
     heroku config:add PGBACKUPS_REGION="us-west-2"
+    heroku config:add PGBACKUPS_DATABASE_URL="your main app's DATABASE_URL or other follower URL here"
 
-By default backups work of your primary database or the value of ENV['DATABASE_URL'], but database backups from your primary can impact the performance of your application.  Optionally set an alternate database to perform backups on with:
+* `PGBACKUPS_DATABASE_URL` can be set either to `DATABASE_URL` or a follower database you setup if you would prefer to not backup from your primary databse for performance reasons.
+* If `PGBACKUPS_DATABASE_URL` is omitted, `pgbackups-archive` will default to the `DATABASE_URL` of the Heroku app it runs under.  This setting will be required going forward, so you'll want to have it set.
+* As mentioned above, the `PGBACKUPS_DATABASE_URL` is mandatory if you are the using Option 2 above.
+* A good security measure would be to use a dedicated set of AWS credentials with a security policy only allowing access to the bucket you're specifying.  See this Pro Tip on [Assigning an AWS IAM user access to a single S3 bucket](http://coderwall.com/p/dwhlma).
 
-    heroku config:add PGBACKUPS_DATABASE_URL="your_follower_database_url_here"
-
-As mentioned above, the PGBACKUPS_DATABASE_URL is manditory if you are the using pgbackups-archive-app from a separate heroku environment.
-
-
-Note: A good security measure would be to use a dedicated set of AWS credentials with a security policy only allowing access to the bucket you're specifying.  See this Pro Tip on [Assigning an AWS IAM user access to a single S3 bucket](http://coderwall.com/p/dwhlma).
-
-Add the rake task to scheduler:
+### Add the rake task to scheduler
 
     heroku addons:open scheduler
 
 Then specify `rake pgbackups:archive` as a task you would like to run at any of the available intervals.
 
-## Loading the Rake task
+### Loading the Rake task
 
 If you're using this gem in a Rails 3 app the rake task will be automatically loaded via a Railtie.
 
