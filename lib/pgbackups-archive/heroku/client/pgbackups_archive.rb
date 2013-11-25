@@ -24,6 +24,8 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def capture
+    tries ||= 3
+
     @pgbackup = @client.create_transfer(database_url, database_url, nil,
       "BACKUP", :expire => true)
 
@@ -32,6 +34,9 @@ class Heroku::Client::PgbackupsArchive
       sleep 1
       @pgbackup = @client.get_transfer @pgbackup["id"]
     end
+  rescue RestClient::ResourceNotFound, RestClient::ServiceUnavailable
+    sleep 10
+    retry unless (tries -= 1).zero?
   end
 
   def delete
