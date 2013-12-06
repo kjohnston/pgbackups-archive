@@ -131,6 +131,12 @@ describe Heroku::Client::PgbackupsArchive do
     end
 
     describe "#environment" do
+      describe "when Rails is not present" do
+        it "should default to nil" do
+          backup.send(:environment).must_equal nil
+        end
+      end
+
       describe "when Rails is present" do
         before do
           class Rails
@@ -142,12 +148,6 @@ describe Heroku::Client::PgbackupsArchive do
 
         it "should use Rails.env" do
           backup.send(:environment).must_equal "test"
-        end
-      end
-
-      describe "when Rails is not present" do
-        it "should default to nil" do
-          backup.send(:environment).must_equal nil
         end
       end
     end
