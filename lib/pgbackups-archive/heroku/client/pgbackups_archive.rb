@@ -64,7 +64,8 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def key
-    [URI(@pgbackup['public_url']).path.split('/').last, environment, @pgbackup["finished_at"]
+    folder_name = ENV["PGBACKUPS_FOLDER"] || URI(@pgbackup['public_url']).path.split('/').last || "pgbackups"
+    [folder_name, environment, @pgbackup["finished_at"]
       .gsub(/\/|\:|\.|\s/, "-").concat(".dump")].compact.join("/")
   end
 
