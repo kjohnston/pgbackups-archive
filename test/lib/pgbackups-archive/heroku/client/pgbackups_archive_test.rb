@@ -4,18 +4,45 @@ require "heroku/client"
 describe Heroku::Client::PgbackupsArchive do
 
   describe "#self.perform" do
-    before do
-      Heroku::Client::PgbackupsArchive.expects(:new).returns(
-        mock(
-          :capture  => stub,
-          :download => stub,
-          :archive  => stub,
-          :delete   => stub
+    describe "one database url" do
+      before do
+        Heroku::Client::PgbackupsArchive.stubs(:database_url).returns("database_url")
+
+        Heroku::Client::PgbackupsArchive.expects(:new).returns(
+          mock(
+            :capture  => stub,
+            :download => stub,
+            :archive  => stub,
+            :delete   => stub
+          )
         )
-      )
+      end
+
+      it { Heroku::Client::PgbackupsArchive.perform }
     end
 
-    it { Heroku::Client::PgbackupsArchive.perform }
+   describe "two database urls" do
+      before do
+        Heroku::Client::PgbackupsArchive.stubs(:database_url).returns("database_url, database_url2")
+
+        Heroku::Client::PgbackupsArchive.expects(:new).at_least(2).returns(
+          mock(
+            :capture  => stub,
+            :download => stub,
+            :archive  => stub,
+            :delete   => stub
+          ),
+          mock(
+            :capture  => stub,
+            :download => stub,
+            :archive  => stub,
+            :delete   => stub
+          )
+        )
+      end
+
+      it { Heroku::Client::PgbackupsArchive.perform }
+    end
   end
 
   describe "An instance" do
@@ -52,17 +79,16 @@ describe Heroku::Client::PgbackupsArchive do
 
     describe "#capture" do
       let(:pgbackup) { { "finished_at" => "some-timestamp" } }
+      let(:db_url) { "db_url" }
 
       before do
-        backup.stubs(:database_url).returns(database_url)
-
         backup.client.expects(:create_transfer)
-          .with(database_url, database_url, nil, "BACKUP", :expire => true)
+          .with(db_url, db_url, nil, "BACKUP", :expire => true)
           .returns(pgbackup)
       end
 
       it "uses the client to create a pgbackup" do
-        backup.capture
+        backup.capture(db_url)
       end
     end
 
@@ -106,7 +132,7 @@ describe Heroku::Client::PgbackupsArchive do
       end
     end
 
-    describe "#database_url" do
+    describe ".database_url" do
       describe "when an alternate database to backup is not set" do
         before do
           ENV["PGBACKUPS_DATABASE_URL"] = nil
@@ -114,7 +140,7 @@ describe Heroku::Client::PgbackupsArchive do
         end
 
         it "defaults to using the DATABASE_URL" do
-          backup.send(:database_url).must_equal "default_url"
+          Heroku::Client::PgbackupsArchive.send(:database_url).must_equal "default_url"
         end
       end
 
@@ -125,7 +151,7 @@ describe Heroku::Client::PgbackupsArchive do
         end
 
         it "uses the PGBACKUPS_DATABASE_URL" do
-          backup.send(:database_url).must_equal "alternate_url"
+          Heroku::Client::PgbackupsArchive.send(:database_url).must_equal "alternate_url"
         end
       end
     end

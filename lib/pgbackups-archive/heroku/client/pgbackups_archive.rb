@@ -6,11 +6,13 @@ class Heroku::Client::PgbackupsArchive
   attr_reader :client, :pgbackup
 
   def self.perform
-    backup = new
-    backup.capture
-    backup.download
-    backup.archive
-    backup.delete
+    self.database_url.split(',').map(&:strip).each do |db_url|
+      backup = new
+      backup.capture(db_url)
+      backup.download
+      backup.archive
+      backup.delete
+    end
   end
 
   def initialize(attrs={})
@@ -23,8 +25,8 @@ class Heroku::Client::PgbackupsArchive
     PgbackupsArchive::Storage.new(key, file).store
   end
 
-  def capture
-    @pgbackup = @client.create_transfer(database_url, database_url, nil,
+  def capture(db_url=nil)
+    @pgbackup = @client.create_transfer(db_url, db_url, nil,
       "BACKUP", :expire => true)
 
     until @pgbackup["finished_at"]
@@ -49,7 +51,7 @@ class Heroku::Client::PgbackupsArchive
 
   private
 
-  def database_url
+  def self.database_url
     ENV["PGBACKUPS_DATABASE_URL"] || ENV["DATABASE_URL"]
   end
 
