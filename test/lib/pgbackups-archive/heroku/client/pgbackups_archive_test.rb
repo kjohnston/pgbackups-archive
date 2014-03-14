@@ -193,13 +193,14 @@ describe Heroku::Client::PgbackupsArchive do
       before do
         backup.instance_eval do
           @pgbackup = {
-            "finished_at" => "timestamp"
+            "finished_at" => "timestamp",
+            "public_url" => "postgres://asdojnasdasd:asdasdasdasd@ec2-533-23-2322.compute-1.amazonaws.com:1111/pasdionioce223"
           }
         end
       end
 
       it "should be composed properly" do
-        backup.send(:key).must_equal "pgbackups/test/timestamp.dump"
+        backup.send(:key).must_equal "pasdionioce223/test/timestamp.dump"
       end
     end
 
