@@ -30,4 +30,18 @@ describe PgbackupsArchive::Storage do
     storage.store.class.must_equal Fog::Storage::AWS::File
   end
 
+  it "should have server-side encryption off by default" do
+    storage.encryption.must_equal nil
+  end
+
+  describe "server-side encryption is enabled" do
+    before do
+      ENV["PGBACKUPS_SERVER_SIDE_ENCRYPTION"] = "true"
+    end
+
+    it "should set encryption to AES256" do
+      storage.encryption.must_equal "AES256"
+    end
+  end
+
 end
