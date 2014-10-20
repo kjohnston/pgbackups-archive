@@ -23,7 +23,7 @@ class PgbackupsArchive::Storage
   end
 
   def store
-    bucket.files.create :key => @key, :body => @file, :public => false
+    bucket.files.create :key => @key, :body => @file, :public => false, :encryption => "AES256"
   end
 
 end
