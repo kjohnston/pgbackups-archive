@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
+
 require "pgbackups-archive/version"
 
 Gem::Specification.new do |s|
@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/kjohnston/pgbackups-archive"
   s.summary     = %q{A means of automating Heroku's pgbackups and archiving them to Amazon S3 via the fog gem.}
   s.description = %q{A means of automating Heroku's pgbackups and archiving them to Amazon S3 via the fog gem.}
+  s.license     = "MIT"
 
   s.add_dependency "bundler", ">= 1.2.3"
   s.add_dependency "fog",     ">= 1.4.0"
