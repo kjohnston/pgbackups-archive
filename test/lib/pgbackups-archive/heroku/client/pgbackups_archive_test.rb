@@ -1,4 +1,4 @@
-require "minitest_helper"
+require "test_helper"
 require "heroku/client"
 
 describe Heroku::Client::PgbackupsArchive do
