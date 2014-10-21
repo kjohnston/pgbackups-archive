@@ -1,4 +1,4 @@
-require "minitest_helper"
+require "test_helper"
 require "heroku/client"
 
 describe Heroku::Client::PgbackupsArchive do
@@ -90,10 +90,9 @@ describe Heroku::Client::PgbackupsArchive do
       before do
         backup.instance_eval do
           @pgbackup = {
-            "public_url" => "https://raw.github.com/kjohnston/pgbackups-archive/master/pgbackups-archive.gemspec"
+            "public_url" => "https://raw.githubusercontent.com/kjohnston/pgbackups-archive/master/pgbackups-archive.gemspec"
           }
         end
-
         backup.download
       end
 
@@ -130,28 +129,6 @@ describe Heroku::Client::PgbackupsArchive do
       end
     end
 
-    describe "#environment" do
-      describe "when Rails is not present" do
-        it "should default to nil" do
-          backup.send(:environment).must_equal nil
-        end
-      end
-
-      describe "when Rails is present" do
-        before do
-          class Rails
-            def self.env
-              "test"
-            end
-          end
-        end
-
-        it "should use Rails.env" do
-          backup.send(:environment).must_equal "test"
-        end
-      end
-    end
-
     describe "#file" do
       let(:temp_file) { "temp-file" }
 
@@ -173,7 +150,9 @@ describe Heroku::Client::PgbackupsArchive do
       end
 
       it "should be composed properly" do
-        backup.send(:key).must_equal "pgbackups/test/timestamp.dump"
+        path = ["pgbackups", backup.send(:environment), "timestamp.dump"]
+          .compact.join("/")
+        backup.send(:key).must_equal path
       end
     end
 

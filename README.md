@@ -92,6 +92,8 @@ Many thanks go to the following who have contributed to making this gem even bet
 * [Karl Baum (@kbaum)](https://github.com/kbaum)
   * Custom setting for database to backup.
   * Streaming support to handle large backup files.
+* [Conroy Whitney (@conroywhitney)](https://github.com/conroywhitney)
+  * Use S3 server-side encryption by default
 
 ## License
 
