@@ -4,7 +4,7 @@ PATH
     pgbackups-archive (0.2.2)
       bundler (~> 1.2, >= 1.2.3)
       fog (~> 1.4, >= 1.4.0)
-      heroku (~> 2.34, >= 2.34.0)
+      heroku (>= 2.34.0)
       rake (~> 0.9.2, >= 0.9.2.2)
 
 GEM
@@ -43,7 +43,7 @@ GEM
       fog-softlayer
       ipaddress (~> 0.5)
       nokogiri (~> 1.5, >= 1.5.11)
-    fog-brightbox (0.5.1)
+    fog-brightbox (0.6.1)
       fog-core (~> 1.22)
       fog-json
       inflecto
@@ -63,7 +63,7 @@ GEM
     fog-sakuracloud (0.1.1)
       fog-core
       fog-json
-    fog-softlayer (0.3.21)
+    fog-softlayer (0.3.23)
       fog-core
       fog-json
     fog-xml (0.1.0)
@@ -79,12 +79,13 @@ GEM
     guard-minitest (2.3.2)
       guard (~> 2.0)
       minitest (>= 3.0)
-    heroku (2.41.0)
-      heroku-api (~> 0.3.7)
+    heroku (3.15.0)
+      heroku-api (~> 0.3.19)
       launchy (>= 0.3.2)
+      multi_json (~> 1.10.1)
       netrc (~> 0.7.7)
-      rest-client (~> 1.6.1)
-      rubyzip
+      rest-client (= 1.6.7)
+      rubyzip (= 0.9.9)
     heroku-api (0.3.19)
       excon (~> 0.38)
       multi_json (~> 1.8)
@@ -102,7 +103,7 @@ GEM
     lumberjack (1.0.9)
     metaclass (0.0.4)
     method_source (0.8.2)
-    mime-types (1.25.1)
+    mime-types (2.4.3)
     mini_portile (0.6.0)
     minitest (5.4.2)
     minitest-rails (2.1.0)
@@ -133,12 +134,9 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
-    rdoc (4.1.2)
-      json (~> 1.4)
-    rest-client (1.6.8)
-      mime-types (~> 1.16)
-      rdoc (>= 2.4.2)
-    rubyzip (1.1.6)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    rubyzip (0.9.9)
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)

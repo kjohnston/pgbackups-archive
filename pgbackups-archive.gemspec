@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "bundler", "~> 1.2",   ">= 1.2.3"
   s.add_runtime_dependency "fog",     "~> 1.4",   ">= 1.4.0"
-  s.add_runtime_dependency "heroku",  "~> 2.34",  ">= 2.34.0"
+  s.add_runtime_dependency "heroku",  ">= 2.34.0"
   s.add_runtime_dependency "rake",    "~> 0.9.2", ">= 0.9.2.2"
 
   s.add_development_dependency "guard-minitest", "~> 2.3", ">= 2.3.2"
