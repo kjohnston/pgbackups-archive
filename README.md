@@ -1,6 +1,7 @@
 # pgbackups-archive
 
 [![Gem Version](https://badge.fury.io/rb/pgbackups-archive.svg)](http://badge.fury.io/rb/pgbackups-archive)
+[![Code Climate](https://codeclimate.com/github/kjohnston/pgbackups-archive/badges/gpa.svg)](https://codeclimate.com/github/kjohnston/pgbackups-archive)
 
 A means of automating Heroku's pgbackups and archiving them to Amazon S3 via the `fog` gem.
 
