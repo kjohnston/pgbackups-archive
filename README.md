@@ -19,6 +19,8 @@ You can configure retention settings at the Amazon S3 bucket level from within t
 
 #### Option 1 - Add `pgbackups-archive` to your existing application
 
+Recommended for apps with light memory usage.
+
 Add the gem to your Gemfile and bundle:
 
     gem "pgbackups-archive"
@@ -26,11 +28,23 @@ Add the gem to your Gemfile and bundle:
 
 #### Option 2 - Add `pgbackups-archive` to a standalone application
 
-* Create a new Heroku application to dedicate to backing up your database.
-* Clone [pgackups-archive-app](https://github.com/kbaum/pgbackups-archive-app) push to your new Heroku app.
-* Add a `PGBACKUPS_DATABASE_URL` environment variable to your backup app that points to your main app's `DATABASE_URL`, or other follower URL, so that `pgbackups-archive` knows which database to backup.
+Recommended for apps with heavier memory usage.
 
-This option is generally recommended over Option 1, particularly if your application has larger slug size and therefore higher memory requirements.  This is because the streaming download & upload of the backup file will utilize a certain amount of memory beyond what an instance of your application uses and if you're close to the threshold of your Dyno size as it is, this increment could put the instance over the limit and cause it to encounter a memory allocation error.  By running a dedicated Heroku app to run `pgbackups-archive` the task will have ample room at the 1X Dyno level to stream the backup files.
+* Create a new repo with `pgackups-archive` added to that app's Gemfile and push
+it to a new Heroku app.
+* Ensure the `PGBACKUPS_DATABASE_URL` environment variable you set for your
+backup app points to your main app's `DATABASE_URL`, or other follower URL, so
+that `pgbackups-archive` in your backup app knows to backup your real app's
+database.
+
+This option exists because the streaming download & upload of the backup file
+will utilize a certain amount of memory beyond what an instance of your
+application uses and if you're close to the threshold of your Dyno size as it
+is, this increment could put the instance over the limit and cause it to
+encounter [memory allocation errors](https://devcenter.heroku.com/articles/error-codes#r14-memory-quota-exceeded).
+By running a dedicated Heroku app to run
+`pgbackups-archive` the task will have ample room at the 1X Dyno level to stream
+the backup files.
 
 ### Install Heroku addons
 
@@ -68,7 +82,7 @@ require "pgbackups-archive"
 
 ## Testing
 
-This gem uses [thincloud-test](https://github.com/newleaders/thincloud-test) to manage its test suite configuration.  This provides MiniTest, Guard and friends.  To run the test suite, use the `guard` command and save a file or hit enter to run the full suite.
+To run the test suite, use the `guard` command and save a file or hit enter to run the full suite.
 
 Use the [pgbackups-archive-dummy](https://github.com/kjohnston/pgbackups-archive-dummy) test harness to setup a dummy database on Heroku to test against.
 
