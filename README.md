@@ -27,7 +27,7 @@ Add the gem to your Gemfile and bundle:
 #### Option 2 - Add `pgbackups-archive` to a standalone application
 
 * Create a new Heroku application to dedicate to backing up your database.
-* Clone [pgackups-archive-app](https://github.com/kbaum/pgbackups-archive-app) push to your new Heroku app.
+* Clone [pgbackups-archive-app](https://github.com/kjohnston/pgbackups-archive) push to your new Heroku app.
 * Add a `PGBACKUPS_DATABASE_URL` environment variable to your backup app that points to your main app's `DATABASE_URL`, or other follower URL, so that `pgbackups-archive` knows which database to backup.
 
 This option is generally recommended over Option 1, particularly if your application has larger slug size and therefore higher memory requirements.  This is because the streaming download & upload of the backup file will utilize a certain amount of memory beyond what an instance of your application uses and if you're close to the threshold of your Dyno size as it is, this increment could put the instance over the limit and cause it to encounter a memory allocation error.  By running a dedicated Heroku app to run `pgbackups-archive` the task will have ample room at the 1X Dyno level to stream the backup files.
