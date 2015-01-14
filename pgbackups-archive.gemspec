@@ -16,11 +16,11 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_runtime_dependency "bundler"
   s.add_runtime_dependency "fog"
   s.add_runtime_dependency "heroku", ">= 2.34.0"
   s.add_runtime_dependency "rake"
 
+  s.add_development_dependency "bundler"
   s.add_development_dependency "guard-minitest", "~> 2.3", ">= 2.3.2"
   s.add_development_dependency "minitest-rails", "~> 2.1", ">= 2.1.0"
   s.add_development_dependency "mocha",          "~> 1.1", ">= 1.1.0"
