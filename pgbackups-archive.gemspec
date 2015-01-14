@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_runtime_dependency "bundler"
-  s.add_runtime_dependency "fog"
+  s.add_runtime_dependency "fog-aws"
   s.add_runtime_dependency "heroku", ">= 2.34.0"
   s.add_runtime_dependency "rake"
 
