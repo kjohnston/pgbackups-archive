@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/pgbackups-archive.svg)](http://badge.fury.io/rb/pgbackups-archive)
 [![Code Climate](https://codeclimate.com/github/kjohnston/pgbackups-archive/badges/gpa.svg)](https://codeclimate.com/github/kjohnston/pgbackups-archive)
 
-A means of automating Heroku's pgbackups and archiving them to Amazon S3 via the `fog` gem.
+A means of automating Heroku's pgbackups and archiving them to Amazon S3.
 
 ## Overview
 
@@ -111,8 +111,11 @@ Many thanks go to the following who have contributed to making this gem even bet
   * Streaming support to handle large backup files.
 * [Conroy Whitney (@conroywhitney)](https://github.com/conroywhitney)
   * Use S3 server-side encryption by default
+* [Chris Gaffney (@gaffneyc)](https://github.com/gaffneyc)
+  * Switch from fog to fog-aws.
+  * Gem config improvements.
 
 ## License
 
 * Freely distributable and licensed under the [MIT license](http://kjohnston.mit-license.org/license.html).
-* Copyright (c) 2012-2013 Kenny Johnston [![endorse](http://api.coderwall.com/kjohnston/endorsecount.png)](http://coderwall.com/kjohnston)
+* Copyright (c) 2012-2015 Kenny Johnston [![endorse](http://api.coderwall.com/kjohnston/endorsecount.png)](http://coderwall.com/kjohnston)
