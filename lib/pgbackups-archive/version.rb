@@ -1,3 +1,3 @@
 module PgbackupsArchive
-  VERSION = "1.0.0.pre"
+  VERSION = "1.0.0"
 end
