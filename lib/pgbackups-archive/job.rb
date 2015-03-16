@@ -3,22 +3,25 @@ require "heroku/command/pg_backups"
 require "heroku/api"
 require "tmpdir"
 
-class Heroku::Client::PgbackupsArchive
+class PgbackupsArchive::Job
 
   attr_reader :client
   attr_accessor :backup_url, :created_at
 
-  def self.perform
-    backup = new
-    backup.capture
-    backup.download
-    backup.archive
-    backup.delete
+  def self.call
+    new.call
   end
 
   def initialize(attrs={})
     Heroku::Command.load
     @client = Heroku::Command::Pg.new([], :app => ENV["PGBACKUPS_APP"])
+  end
+
+  def call
+    capture
+    download
+    archive
+    delete
   end
 
   def archive
@@ -37,7 +40,7 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def delete
-    File.delete temp_file
+    File.delete(temp_file)
   end
 
   def download

@@ -17,14 +17,15 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   # Heroku PGBackups launched when 3.28.6 shipped (replacing older PG Backups)
-  s.add_runtime_dependency "heroku", ">= 3.28.6"
+  s.add_runtime_dependency "heroku", "~> 3.28", ">= 3.28.6"
 
   s.add_runtime_dependency "fog-aws"
   s.add_runtime_dependency "rake"
 
   s.add_development_dependency "bundler"
-  s.add_development_dependency "guard-minitest", "~> 2.3", ">= 2.3.2"
-  s.add_development_dependency "minitest-rails", "~> 2.1", ">= 2.1.0"
-  s.add_development_dependency "mocha",          "~> 1.1", ">= 1.1.0"
-  s.add_development_dependency "simplecov",      "~> 0.9", ">= 0.9.1"
+  s.add_development_dependency "guard",          "~> 2.12", "~> 2.12.5"
+  s.add_development_dependency "guard-minitest", "~> 2.3",  ">= 2.3.2"
+  s.add_development_dependency "minitest-rails", "~> 2.1",  ">= 2.1.0"
+  s.add_development_dependency "mocha",          "~> 1.1",  ">= 1.1.0"
+  s.add_development_dependency "simplecov",      "~> 0.9",  ">= 0.9.1"
 end
