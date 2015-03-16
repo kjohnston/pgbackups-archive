@@ -9,15 +9,17 @@ Gem::Specification.new do |s|
   s.authors     = ["Kenny Johnston"]
   s.email       = ["kjohnston.ca@gmail.com"]
   s.homepage    = "http://github.com/kjohnston/pgbackups-archive"
-  s.summary     = %q{Automates archival of Heroku's pgbackups to S3}
-  s.description = %q{A means of automating Heroku's pgbackups and archiving them to Amazon S3 via the fog gem.}
+  s.summary     = %q{Automates archival of Heroku PGBackups to S3}
+  s.description = %q{A means of automating Heroku PGBackups and archiving them to Amazon S3.}
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
+  # Heroku PGBackups launched when 3.28.6 shipped (replacing older PG Backups)
+  s.add_runtime_dependency "heroku", ">= 3.28.6"
+
   s.add_runtime_dependency "fog-aws"
-  s.add_runtime_dependency "heroku", ">= 2.34.0"
   s.add_runtime_dependency "rake"
 
   s.add_development_dependency "bundler"
