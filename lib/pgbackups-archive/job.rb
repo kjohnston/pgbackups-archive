@@ -18,6 +18,7 @@ class PgbackupsArchive::Job
   end
 
   def call
+    expire
     capture
     download
     archive
@@ -25,7 +26,9 @@ class PgbackupsArchive::Job
   end
 
   def archive
-    PgbackupsArchive::Storage.new(key, file).store
+    if PgbackupsArchive::Storage.new(key, file).store
+      client.display "Backup archived"
+    end
   end
 
   def capture
@@ -56,7 +59,27 @@ class PgbackupsArchive::Job
     end
   end
 
+  def expire
+    transfers = client.send(:hpg_app_client, ENV["PGBACKUPS_APP"]).transfers
+      .select  { |b| b[:from_type] == "pg_dump" && b[:to_type] == "gof3r" }
+      .sort_by { |b| b[:created_at] }
+
+    if transfers.size > pgbackups_to_keep
+      backup_id  = "b%03d" % transfers.first[:num]
+      backup_num = client.send(:backup_num, backup_id)
+
+      expire_backup(backup_num)
+
+      client.display "Backup #{backup_id} expired"
+    end
+  end
+
   private
+
+  def expire_backup(backup_num)
+    client.send(:hpg_app_client, ENV["PGBACKUPS_APP"])
+      .transfers_delete(backup_num)
+  end
 
   def database
     ENV["PGBACKUPS_DATABASE"] || "DATABASE_URL"
@@ -73,6 +96,10 @@ class PgbackupsArchive::Job
   def key
     timestamp = created_at.gsub(/\/|\:|\.|\s/, "-").concat(".dump")
     ["pgbackups", environment, timestamp].compact.join("/")
+  end
+
+  def pgbackups_to_keep
+    var = ENV["PGBACKUPS_KEEP"] ? var.to_i : 30
   end
 
   def temp_file
