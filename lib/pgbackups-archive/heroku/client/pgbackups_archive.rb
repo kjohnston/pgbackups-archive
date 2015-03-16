@@ -1,9 +1,12 @@
-require "heroku/client"
+require "heroku/command/pg"
+require "heroku/command/pg_backups"
+require "heroku/api"
 require "tmpdir"
 
 class Heroku::Client::PgbackupsArchive
 
-  attr_reader :client, :pgbackup
+  attr_reader :client
+  attr_accessor :backup_url, :created_at
 
   def self.perform
     backup = new
@@ -15,8 +18,7 @@ class Heroku::Client::PgbackupsArchive
 
   def initialize(attrs={})
     Heroku::Command.load
-    @client   = Heroku::Client::Pgbackups.new pgbackups_url
-    @pgbackup = nil
+    @client = Heroku::Command::Pg.new([], :app => ENV["PGBACKUPS_APP"])
   end
 
   def archive
@@ -24,14 +26,14 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def capture
-    @pgbackup = @client.create_transfer(database_url, database_url, nil,
-      "BACKUP", :expire => true)
+    attachment = client.send(:generate_resolver).resolve(database)
+    backup = client.send(:hpg_client, attachment).backups_capture
+    client.send(:poll_transfer, "backup", backup[:uuid])
 
-    until @pgbackup["finished_at"]
-      print "."
-      sleep 1
-      @pgbackup = @client.get_transfer @pgbackup["id"]
-    end
+    self.created_at = backup[:created_at]
+
+    self.backup_url = Heroku::Client::HerokuPostgresqlApp
+      .new(ENV["PGBACKUPS_APP"]).transfers_public_url(backup[:num])[:url]
   end
 
   def delete
@@ -43,14 +45,18 @@ class Heroku::Client::PgbackupsArchive
       streamer = lambda do |chunk, remaining_bytes, total_bytes|
         output.write chunk
       end
-      Excon.get(@pgbackup["public_url"], :response_block => streamer)
+
+      # https://github.com/excon/excon/issues/475
+      Excon.get backup_url,
+        :response_block    => streamer,
+        :omit_default_port => true
     end
   end
 
   private
 
-  def database_url
-    ENV["PGBACKUPS_DATABASE_URL"] || ENV["DATABASE_URL"]
+  def database
+    ENV["PGBACKUPS_DATABASE"] || "DATABASE_URL"
   end
 
   def environment
@@ -58,20 +64,16 @@ class Heroku::Client::PgbackupsArchive
   end
 
   def file
-    File.open temp_file, "r"
+    File.open(temp_file, "r")
   end
 
   def key
-    ["pgbackups", environment, @pgbackup["finished_at"]
-      .gsub(/\/|\:|\.|\s/, "-").concat(".dump")].compact.join("/")
-  end
-
-  def pgbackups_url
-    ENV["PGBACKUPS_URL"]
+    timestamp = created_at.gsub(/\/|\:|\.|\s/, "-").concat(".dump")
+    ["pgbackups", environment, timestamp].compact.join("/")
   end
 
   def temp_file
-    "#{Dir.tmpdir}/#{URI(@pgbackup['public_url']).path.split('/').last}"
+    "#{Dir.tmpdir}/pgbackup"
   end
 
 end
