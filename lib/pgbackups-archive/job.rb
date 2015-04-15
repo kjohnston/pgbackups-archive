@@ -99,7 +99,7 @@ class PgbackupsArchive::Job
   end
 
   def pgbackups_to_keep
-    var = ENV["PGBACKUPS_KEEP"] ? var.to_i : 30
+    var = ENV["PGBACKUPS_KEEP"] ? ENV["PGBACKUPS_KEEP"].to_i : 30
   end
 
   def temp_file
