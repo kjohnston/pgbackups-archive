@@ -112,6 +112,8 @@ Many thanks go to the following who have contributed to making this gem even bet
 * [Chris Gaffney (@gaffneyc)](https://github.com/gaffneyc)
   * Switch from fog to fog-aws.
   * Gem config improvements.
+* [Juraj Masar @jurajmasar](https://github.com/jurajmasar)
+  * Fix for reading env var.
 
 ## License
 
