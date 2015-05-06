@@ -58,10 +58,6 @@ A good security measure would be to use a dedicated set of AWS credentials with 
     # database (useful for follower databases).
     heroku config:add PGBACKUPS_DATABASE="HEROKU_POSTGRESQL_BLACK_URL"
 
-    # Optional: If you wish to customize the number of manual backups kept at
-    # the Heroku PGBackups level, set this.
-    heroku config:add PGBACKUPS_KEEP="30"
-
 ### Add the rake task to scheduler
 
     heroku addons:open scheduler

@@ -25,7 +25,6 @@ describe PgbackupsArchive::Job do
 
     describe "#call" do
       before do
-        @job.expects(:expire)
         @job.expects(:capture)
         @job.expects(:download)
         @job.expects(:archive)
