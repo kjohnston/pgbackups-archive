@@ -18,7 +18,7 @@ class PgbackupsArchive::Job
   end
 
   def call
-    expire
+    # expire  # Disabled b/c Heroku seems to be keeping only 2 on its own
     capture
     download
     archive
