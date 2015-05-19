@@ -13,8 +13,10 @@ class PgbackupsArchive::Job
   end
 
   def initialize(attrs={})
+    @app = attrs.fetch(:app, ENV['PGBACKUPS_APP'])
+    @database = attrs.fetch(:database, ENV['PGBACKUPS_DATABASE'] || 'DATABASE_URL')
     Heroku::Command.load
-    @client = Heroku::Command::Pg.new([], :app => ENV["PGBACKUPS_APP"])
+    @client = Heroku::Command::Pg.new([], :app => @app)
   end
 
   def call
@@ -32,14 +34,14 @@ class PgbackupsArchive::Job
   end
 
   def capture
-    attachment = client.send(:generate_resolver).resolve(database)
+    attachment = client.send(:generate_resolver).resolve(@database)
     backup = client.send(:hpg_client, attachment).backups_capture
     client.send(:poll_transfer, "backup", backup[:uuid])
 
     self.created_at = backup[:created_at]
 
     self.backup_url = Heroku::Client::HerokuPostgresqlApp
-      .new(ENV["PGBACKUPS_APP"]).transfers_public_url(backup[:num])[:url]
+      .new(@app).transfers_public_url(backup[:num])[:url]
   end
 
   def delete
@@ -60,7 +62,7 @@ class PgbackupsArchive::Job
   end
 
   def expire
-    transfers = client.send(:hpg_app_client, ENV["PGBACKUPS_APP"]).transfers
+    transfers = client.send(:hpg_app_client, @app).transfers
       .select  { |b| b[:from_type] == "pg_dump" && b[:to_type] == "gof3r" }
       .sort_by { |b| b[:created_at] }
 
@@ -77,12 +79,8 @@ class PgbackupsArchive::Job
   private
 
   def expire_backup(backup_num)
-    client.send(:hpg_app_client, ENV["PGBACKUPS_APP"])
+    client.send(:hpg_app_client, @app)
       .transfers_delete(backup_num)
-  end
-
-  def database
-    ENV["PGBACKUPS_DATABASE"] || "DATABASE_URL"
   end
 
   def environment
@@ -94,12 +92,12 @@ class PgbackupsArchive::Job
   end
 
   def key
-    timestamp = created_at.gsub(/\/|\:|\.|\s/, "-").concat(".dump")
-    ["pgbackups", environment, timestamp].compact.join("/")
+    timestamp = created_at.gsub(/\/|\:|\.|\s/, "-").gsub(/\+/, '').concat(".dump")
+    ["pgbackups", @app, environment, timestamp].compact.join("/")
   end
 
   def pgbackups_to_keep
-    var = ENV["PGBACKUPS_KEEP"] ? ENV["PGBACKUPS_KEEP"].to_i : 30
+     ENV["PGBACKUPS_KEEP"] ? ENV["PGBACKUPS_KEEP"].to_i : 30
   end
 
   def temp_file
