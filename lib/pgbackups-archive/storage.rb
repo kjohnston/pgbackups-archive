@@ -19,7 +19,12 @@ class PgbackupsArchive::Storage
   end
 
   def bucket
-    connection.directories.get ENV["PGBACKUPS_BUCKET"]
+    directory = connection.directories.get ENV["PGBACKUPS_BUCKET"]
+    directory = connection.directories.create(
+        :key => ENV["PGBACKUPS_BUCKET"],
+        :public => false
+    ) if directory.nil?
+    directory
   end
 
   def store

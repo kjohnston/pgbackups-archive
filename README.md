@@ -64,6 +64,18 @@ A good security measure would be to use a dedicated set of AWS credentials with 
 
 Then specify `rake pgbackups:archive` as a task you would like to run at any of the available intervals.
 
+### Using the same clock for do backups on multiple apps
+
+If you don't use the `PGBACKUPS_APP` env var, you can call the task with params.
+
+
+    rake pgbackups:archive[your-app-name]
+
+
+If you want to do a backup for no `DATABASE_URL` you can execute:
+
+    rake pgbackups:archive[your-app-name,HEROKU_POSTGRESQL_BLACK_URL]
+
 ### Loading the Rake task
 
 If you're using this gem in a Rails 3 app the rake task will be automatically loaded via a Railtie.
