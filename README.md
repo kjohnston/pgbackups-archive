@@ -64,6 +64,10 @@ A good security measure would be to use a dedicated set of AWS credentials with 
 
 Then specify `rake pgbackups:archive` as a task you would like to run at any of the available intervals.
 
+In case you would like to make backups at different intervals simply "protect" a daily task using a bash if-statement, for example to run a task every 1st day in a month:
+
+    if [ "$(date +%d)" = 01 ]; then rake pgbackups:archive; fi
+
 ### Loading the Rake task
 
 If you're using this gem in a Rails 3 app the rake task will be automatically loaded via a Railtie.
