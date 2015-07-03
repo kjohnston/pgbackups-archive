@@ -37,7 +37,7 @@ Add the gem to your Gemfile and bundle:
 
 ### Install Heroku Scheduler add-on
 
-    heroku addons:add scheduler:standard
+    heroku addons:create scheduler
 
 ### Setup an AWS IAM user, S3 bucket and policy
 
