@@ -93,9 +93,13 @@ class PgbackupsArchive::Job
     File.open(temp_file, "r")
   end
 
+  def prefix
+    ENV["PGBACKUPS_PREFIX"].chomp('/') || "pgbackups/#{environment}"
+  end
+
   def key
     timestamp = created_at.gsub(/\/|\:|\.|\s/, "-").concat(".dump")
-    ["pgbackups", environment, timestamp].compact.join("/")
+    [prefix, timestamp].compact.join("/")
   end
 
   def pgbackups_to_keep
