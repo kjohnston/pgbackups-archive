@@ -23,7 +23,7 @@ class PgbackupsArchive::Storage
   end
 
   def store
-    bucket.files.create :key => @key, :body => @file, :public => false, :encryption => "AES256"
+    bucket.files.create :key => @key, :body => @file, :public => false, :encryption => "AES256", :multipart_chunk_size => 5242880
   end
 
 end
