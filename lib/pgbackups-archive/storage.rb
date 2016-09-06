@@ -23,7 +23,13 @@ class PgbackupsArchive::Storage
   end
 
   def store
-    bucket.files.create :key => @key, :body => @file, :public => false, :encryption => "AES256", :multipart_chunk_size => 104857600
+    options = {:key => @key, :body => @file, :public => false, :encryption => "AES256"}
+
+    if ENV["PGBACKUPS_MULTIPART_CHUNK_SIZE"]
+      options.merge!(:multipart_chunk_size => ENV["PGBACKUPS_MULTIPART_CHUNK_SIZE"].to_i)
+    end
+
+    bucket.files.create(options)
   end
 
 end
