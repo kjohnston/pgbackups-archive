@@ -89,7 +89,7 @@ describe PgbackupsArchive::Job do
 
       it do
         @job.download
-        @job.send(:file).read.must_match /Gem::Specification/
+        @job.send(:file).read.must_match(/Gem::Specification/)
       end
     end
 

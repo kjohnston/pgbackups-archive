@@ -18,7 +18,8 @@ Gem::Specification.new do |s|
 
   # Heroku PGBackups launched when 3.28.6 shipped (replacing older PG Backups).
   # v3.33 changes its internal API to v4.
-  s.add_runtime_dependency "heroku", ">= 3.28.6", "<= 3.32"
+  s.add_runtime_dependency "heroku",     ">= 3.28.6", "<= 3.32"
+  s.add_runtime_dependency "heroku-api", "~> 0.3.23"
 
   s.add_runtime_dependency "fog-aws"
   s.add_runtime_dependency "rake"

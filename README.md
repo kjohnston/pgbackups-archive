@@ -13,8 +13,7 @@ If you're still using an older version of `pgbackups-archive`, it's time to upgr
 
 Read more about this transition in Heroku's offerings on the Heroku Blog: [PG Backups Levels Up](https://blog.heroku.com/archives/2015/3/11/pgbackups-levels-up)
 
-Please note that the environment variables that need to be defined have changed with
-v1.0.0.
+Please note that the environment variables that need to be defined have changed with v1.0.0.
 
 ## Overview
 
@@ -70,7 +69,7 @@ In case you would like to make backups at different intervals simply "protect" a
 
 ### Loading the Rake task
 
-If you're using this gem in a Rails 3 app the rake task will be automatically loaded via a Railtie.
+If you're using this gem in a Rails 3+ app the rake task will be automatically loaded via a Railtie.
 
 If you're using this gem with a Rails 2 app, or non-Rails app, add the following to your Rakefile:
 
@@ -100,22 +99,25 @@ I shouldn't have to say this, but I will.  Your backups are your responsibility.
 
 Many thanks go to the following who have contributed to making this gem even better:
 
-* [Robert Bousquet (@bousquet)](https://github.com/bousquet)
-  * Autoload rake task into Rails 2.x once the gem has been loaded.
-* [Daniel Morrison (@danielmorrison)](https://github.com/danielmorrison)
-  * Ruby 1.8-compatible hash syntax.
-* [Karl Baum (@kbaum)](https://github.com/kbaum)
-  * Custom setting for database to backup.
-  * Streaming support to handle large backup files.
-* [Conroy Whitney (@conroywhitney)](https://github.com/conroywhitney)
+* Robert Bousquet ([@bousquet](https://github.com/bousquet))
+  * Autoload rake task into Rails 2.x once the gem has been loaded
+* Daniel Morrison ([@danielmorrison](https://github.com/danielmorrison))
+  * Ruby 1.8-compatible hash syntax
+* Karl Baum ([@kbaum](https://github.com/kbaum))
+  * Custom setting for database to backup
+  * Streaming support to handle large backup files
+* Conroy Whitney ([@conroywhitney](https://github.com/conroywhitney))
   * Use S3 server-side encryption by default
-* [Chris Gaffney (@gaffneyc)](https://github.com/gaffneyc)
-  * Switch from fog to fog-aws.
-  * Gem config improvements.
-* [Juraj Masar @jurajmasar](https://github.com/jurajmasar)
-  * Fix for reading env var.
+* Chris Gaffney ([@gaffneyc](https://github.com/gaffneyc))
+  * Switch from fog to fog-aws
+  * Gem config improvements
+* Juraj Masar ([@jurajmasar](https://github.com/jurajmasar))
+  * Fix for reading env var
+  * Cutom multipart chunk size
+* Jan Stastny ([@jstastny](https://github.com/jstastny))
+  * Custom multipart chunk size
 
 ## License
 
 * Freely distributable and licensed under the [MIT license](http://kjohnston.mit-license.org/license.html).
-* Copyright (c) 2012-2015 Kenny Johnston [![endorse](http://api.coderwall.com/kjohnston/endorsecount.png)](http://coderwall.com/kjohnston)
+* Copyright (c) 2012-2016 [Kenny Johnston](https://github.com/kjohnston)
