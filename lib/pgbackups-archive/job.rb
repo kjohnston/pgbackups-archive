@@ -13,6 +13,7 @@ class PgbackupsArchive::Job
   end
 
   def initialize(attrs={})
+    raise ArgumentError, "You must set ENV['PGBACKUPS_APP'] to the name of your app" if ENV["PGBACKUPS_APP"].nil?
     Heroku::Command.load
     @client = Heroku::Command::Pg.new([], :app => ENV["PGBACKUPS_APP"])
   end
