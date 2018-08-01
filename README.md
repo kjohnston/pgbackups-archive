@@ -5,15 +5,12 @@
 
 A means of automating Heroku PGBackups and archiving them to Amazon S3.
 
-## Upgrade Alert
+## This Project is No Longer Active
 
-As of v1.0.0, `pgbackups-archive` works with the new [Heroku PGBackups](https://devcenter.heroku.com/articles/heroku-postgres-backups) service, which replaced the older [PG Backups](https://devcenter.heroku.com/articles/pgbackups) add-on.
+As of June 29, 2018, Heroku has [yanked](https://rubygems.org/gems/heroku/versions) the older versions of the [Heroku Legacy CLI](https://github.com/heroku/legacy-cli) that the `pgbackups-archive` gem depends on.  As a result, you should discontinue use of `pgbackups-archive`.
 
-If you're still using an older version of `pgbackups-archive`, it's time to upgrade!
+If you're looking for a similar means of replicating Heroku database backups to Amazon S3, please see the [heroku-database-backups](https://github.com/kbaum/heroku-database-backups) project.
 
-Read more about this transition in Heroku's offerings on the Heroku Blog: [PG Backups Levels Up](https://blog.heroku.com/archives/2015/3/11/pgbackups-levels-up)
-
-Please note that the environment variables that need to be defined have changed with v1.0.0.
 
 ## Overview
 
